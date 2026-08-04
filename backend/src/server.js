@@ -1,11 +1,7 @@
-const express = require("express");  //import express
-const app = express();  // creating a express application
+const app = require("./app");
+
 const port=3000;
-app.get("/api/healthy",(req,res)=>{
-   res.json({
-    message:"CoTask API is running"
-   })
-});
+
 app.listen(port,()=>{
   console.log(`CoTask server is running on port ${port}`)
 });// starts the Express server and makes it listen for incoming HTTP requests on the specified port.
