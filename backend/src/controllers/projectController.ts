@@ -17,5 +17,28 @@ const getProjects = async (req: Request, res: Response) => {
         });
     }
 };
+const createProject= async ( req:Request,res:Response)=>{
+    try{
+    const {name,description}=req.body;
+    const project= await prisma.project.create({
+        data:{   
+        name,
+        description 
+     }
+        
+    });
+    res.json({
+     project
+    })
+    }
+    catch (error) {
+    console.error(error);
 
-export { getProjects };
+    res.status(500).json({
+        message: "Internal Server Error"
+    });
+}
+
+
+}
+export { getProjects,createProject};
