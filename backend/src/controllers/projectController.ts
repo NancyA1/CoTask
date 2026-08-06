@@ -99,4 +99,25 @@ const updateProjectById= async (req:Request,res:Response)=>{
         })
     }
 }
-export { getProjects,createProject,getProjectById,updateProjectById};
+const deleteProjectById = async (req:Request, res:Response)=>{
+ try{
+    const id= Number(req.params.id);
+  const project= await prisma.project.delete({
+    where:{
+        id:id
+    }
+  })
+  res.json({
+    "message": "Project deleted successfully"
+  })
+ }
+
+ catch(error){
+    res.status(404).json({
+            message:"Couldn't delete project"
+        })
+ }
+}
+
+
+export { getProjects,createProject,getProjectById,updateProjectById,deleteProjectById};
