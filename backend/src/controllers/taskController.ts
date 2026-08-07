@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
 import { json } from "node:stream/consumers";
+import { title } from "node:process";
 
 const createTask = async (req:Request,res:Response)=>{
     try{  
@@ -75,5 +76,42 @@ res.status(200).json({
 }
 };
 
+const updateTaskById = async (req: Request, res: Response) => {
+    try{
+const id = Number(req.params.id);
+const {title,description,status,priority,dueDate}=req.body;
+const task = await prisma.task.findUnique({
+    where:{
+        id:id
+    }
+});
+if(!task){
+   return res.status(404).json({
+        message:"task not found"
+    })
+}
+const updatedTask  = await prisma.task.update({
+  where:{
+    id:id
+  },
+  data:{
+    title,
+    description,
+    status,
+    priority,
+    dueDate: dueDate ? new Date(dueDate) : null
 
-export{createTask,getTasks,getTaskById};
+  }
+});
+
+res.status(200).json({
+    updatedTask 
+})
+    }
+    catch(error){
+        return res.status(500).json({
+        message: "Something went wrong"
+    });
+    }
+};
+export{createTask,getTasks,getTaskById,updateTaskById};
