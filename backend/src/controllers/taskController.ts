@@ -3,7 +3,7 @@ import prisma from "../config/prisma";
 
 const createTask = async (req:Request,res:Response)=>{
     try{  
-    const {title,description,status,priority,projectId}=req.body;
+    const {title,description,status,priority,projectId,dueDate}=req.body;
 
     const project = await prisma.project.findUnique({
         where:{
@@ -21,7 +21,8 @@ const createTask = async (req:Request,res:Response)=>{
        description, 
       status,      
       priority,    
-      projectId
+      projectId,
+      dueDate: dueDate ? new Date(dueDate) : null
         }
     })
     res.status(201).json({

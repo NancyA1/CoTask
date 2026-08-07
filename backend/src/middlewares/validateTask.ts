@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 const validateTask = (req: Request, res: Response, next: NextFunction) => {
-const {title, status, priority}=req.body;
+const {title, status, priority, dueDate}=req.body;
 const validStatuses = ["todo", "in_progress", "done"];
 const validPriorities=["low","medium","high"];
 if(!title){
@@ -17,6 +17,17 @@ if(priority && !validPriorities.includes(priority)){
     return res.status(400).json({
         message:"priority must be low,medium, or high"
     });
+}
+if (dueDate) {
+const selectedDate = new Date(dueDate);
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+if (selectedDate < today) {
+    return res.status(400).json({
+        message: "Due date cannot be in the past"
+    });
+}
+
 }
 next();
 
