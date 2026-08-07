@@ -1,5 +1,6 @@
 import express from "express";
 import projectRoutes from "./routes/projectRoutes";
+import taskRoutes from "./routes/taskRoutes";
 
 const app = express();
 
@@ -12,5 +13,5 @@ app.get("/api/healthy", (req, res) => {
         message: "CoTask API is running"
     });
 });
-
+app.use("/api/tasks", taskRoutes);
 export default app;
