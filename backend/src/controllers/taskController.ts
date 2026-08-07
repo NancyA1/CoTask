@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
-import { json } from "node:stream/consumers";
-import { title } from "node:process";
+
 
 const createTask = async (req:Request,res:Response)=>{
     try{  
@@ -114,4 +113,33 @@ res.status(200).json({
     });
     }
 };
-export{createTask,getTasks,getTaskById,updateTaskById};
+const deleteTaskById = async (req:Request,res:Response) =>{
+    try{
+
+const id = Number(req.params.id);
+const task = await prisma.task.findUnique({
+   where:{
+    id:id
+   }
+});
+if(!task){
+    return res.status(404).json({
+        message:"task not found"
+    })
+}
+const deletedTask= await prisma.task.delete({
+    where:{
+        id:id
+    }
+});
+res.status(200).json({
+    deletedTask
+})
+    }
+    catch(error){
+        res.status(500).json({
+            message:"somthing went wrong"
+        });
+    }
+}
+export{createTask,getTasks,getTaskById,updateTaskById,deleteTaskById};
