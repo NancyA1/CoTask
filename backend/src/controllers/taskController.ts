@@ -35,4 +35,21 @@ catch(error){
         });
 }
 }
-export{createTask};
+
+const getTasks = async (req: Request, res: Response) => {
+    try{
+ const tasks = await prisma.task.findMany();
+ res.json({
+    tasks
+ })}
+
+ catch(error){
+    res.status(500).json({
+            message: "Something went wrong"
+        });
+ }
+}
+
+
+
+export{createTask,getTasks};
