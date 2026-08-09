@@ -39,7 +39,9 @@ catch(error){
 
 const getTasks = async (req: Request, res: Response) => {
     try{
- const tasks = await prisma.task.findMany();
+ const tasks = await prisma.task.findMany({
+    include:{project:true}
+ });
  res.json({
     tasks
  })}
