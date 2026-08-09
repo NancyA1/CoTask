@@ -19,9 +19,14 @@ if(priority && !validPriorities.includes(priority)){
     });
 }
 if (dueDate) {
-const selectedDate = new Date(dueDate);
+const selectedDate= new Date(dueDate);
 const today = new Date();
 today.setHours(0, 0, 0, 0);
+if (Number.isNaN(selectedDate.getTime())) {
+    return res.status(400).json({
+        message: "Enter a valid dueDate"
+    });
+}
 if (selectedDate < today) {
     return res.status(400).json({
         message: "Due date cannot be in the past"
