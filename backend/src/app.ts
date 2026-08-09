@@ -1,6 +1,7 @@
 import express from "express";
 import projectRoutes from "./routes/projectRoutes";
 import taskRoutes from "./routes/taskRoutes";
+import authRoutes from "./routes/authRoutes";
 
 const app = express();
 
@@ -14,4 +15,6 @@ app.get("/api/healthy", (req, res) => {
     });
 });
 app.use("/api/tasks", taskRoutes);
+
+app.use("/api/auth",authRoutes);
 export default app;
