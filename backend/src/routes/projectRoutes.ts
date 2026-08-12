@@ -8,6 +8,5 @@ router.get("/", authMiddleware, getProjects);
 router.post("/", authMiddleware, createProject);
 router.get("/:id", getProjectById);
 router.put("/:id",updateProjectById);
-router.delete("/:id",deleteProjectById)
-
+router.delete("/:id", authMiddleware, deleteProjectById);
 export default router;

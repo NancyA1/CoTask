@@ -120,6 +120,25 @@ const updateProjectById= async (req:Request,res:Response)=>{
 const deleteProjectById = async (req:Request, res:Response)=>{
  try{
     const id= Number(req.params.id);
+    const userId = req.user!.userId;
+    const membership = await prisma.projectMember.findUnique({
+    where: {
+        userId_projectId: {
+            userId,
+            projectId: id
+        }
+    }
+});
+if (!membership) {
+    return res.status(403).json({
+        message: "You are not a member of this project"
+    });
+}
+if (membership.role !== "admin") {
+    return res.status(403).json({
+        message: "Only project admins can delete the project"
+    });
+}
   const project= await prisma.project.delete({
     where:{
         id:id
