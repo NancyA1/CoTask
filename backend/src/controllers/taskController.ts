@@ -87,6 +87,7 @@ const getTasks = async (req: Request, res: Response) => {
 const getTaskById = async (req: Request, res: Response) => {
     try{
 const id = Number(req.params.id);
+const userId = req.user!.userId;
 const task= await prisma.task.findUnique({
     where:{
         id:id
@@ -97,6 +98,20 @@ if(!task){
  return  res.status(404).json({
     message:"task not found"
   });
+}
+const membership = await prisma.projectMember.findUnique({
+    where: {
+        userId_projectId: {
+            userId,
+            projectId: task.projectId
+        }
+    }
+});
+
+if (!membership) {
+    return res.status(403).json({
+        message: "You are not a member of this project"
+    });
 }
 res.status(200).json({
     task
@@ -123,6 +138,23 @@ if(!task){
         message:"task not found"
     })
 }
+const userId = req.user!.userId;
+
+const membership = await prisma.projectMember.findUnique({
+    where: {
+        userId_projectId: {
+            userId,
+            projectId: task.projectId
+        }
+    }
+});
+
+if (!membership) {
+    return res.status(403).json({
+        message: "You are not a member of this project"
+    });
+}
+
 const updatedTask  = await prisma.task.update({
   where:{
     id:id
@@ -161,6 +193,29 @@ if(!task){
         message:"task not found"
     })
 }
+const userId = req.user!.userId;
+
+const membership = await prisma.projectMember.findUnique({
+    where: {
+        userId_projectId: {
+            userId,
+            projectId: task.projectId
+        }
+    }
+});
+
+if (!membership) {
+    return res.status(403).json({
+        message: "You are not a member of this project"
+    });
+}
+
+if (membership.role !== "admin") {
+    return res.status(403).json({
+        message: "Only project admins can delete tasks"
+    });
+}
+
 const deletedTask= await prisma.task.delete({
     where:{
         id:id
