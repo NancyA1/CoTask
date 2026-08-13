@@ -63,6 +63,7 @@ const createProject= async ( req:Request,res:Response)=>{
 const getProjectById = async (req: Request, res: Response) => {
     try {
         const id = Number(req.params.id);
+        const userId = req.user!.userId;
 
         const project = await prisma.project.findUnique({
             where: {
@@ -75,6 +76,22 @@ const getProjectById = async (req: Request, res: Response) => {
                 message: "Project not found"
             });
         }
+        const membership = await prisma.projectMember.findUnique({
+    where: {
+        userId_projectId: {
+            userId,
+            projectId: id
+        }
+    }
+});
+
+if (!membership) {
+    return res.status(403).json({
+        message: "You are not a member of this project"
+    });
+}
+
+        
 
         res.json({
             project
@@ -88,6 +105,7 @@ const getProjectById = async (req: Request, res: Response) => {
 const updateProjectById= async (req:Request,res:Response)=>{
     try{
     const id = Number(req.params.id);
+    const userId = req.user!.userId;
     const {name,description}= req.body;
     const project= await prisma.project.findUnique({
         where:{
@@ -99,6 +117,25 @@ const updateProjectById= async (req:Request,res:Response)=>{
                 message: "Project not found"
             });
     }
+    const membership = await prisma.projectMember.findUnique({
+    where: {
+        userId_projectId: {
+            userId,
+            projectId: id
+        }
+    }
+});
+
+if (!membership) {
+    return res.status(403).json({
+        message: "You are not a member of this project"
+    });
+}
+if (membership.role !== "admin") {
+    return res.status(403).json({
+        message: "Only project admins can update the project"
+    });
+}
     const updatedProject= await prisma.project.update({
         where:{
             id:id
@@ -112,10 +149,12 @@ const updateProjectById= async (req:Request,res:Response)=>{
     })
 }
     catch(error){
-        res.status(404).json({
-            message:"couldnt update the project"
-        })
-    }
+    console.error(error);
+
+    res.status(500).json({
+        message: "Something went wrong"
+    });
+}
 }
 const deleteProjectById = async (req:Request, res:Response)=>{
  try{
@@ -150,10 +189,12 @@ if (membership.role !== "admin") {
  }
 
  catch(error){
-    res.status(404).json({
-            message:"Couldn't delete project"
-        })
- }
+    console.error(error);
+
+    res.status(500).json({
+        message: "Something went wrong"
+    });
+}
 }
 
 
