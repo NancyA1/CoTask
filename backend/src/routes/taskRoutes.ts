@@ -3,7 +3,7 @@ import { createTask, deleteTaskById, getTaskById, getTasks, updateTaskById } fro
 import { validateTask } from "../middlewares/validateTask";
 import { authMiddleware } from "../middlewares/authMiddleware";
 const router = express.Router();
-router.post("/", validateTask, createTask);
+router.post("/", authMiddleware, validateTask, createTask);
 router.get("/", authMiddleware, getTasks);
 router.get("/:id",getTaskById);
 router.put("/:id",validateTask,updateTaskById);

@@ -5,7 +5,7 @@ import prisma from "../config/prisma";
 const createTask = async (req:Request,res:Response)=>{
     try{  
     const {title,description,status,priority,projectId,dueDate}=req.body;
-
+    const userId = req.user!.userId;
     const project = await prisma.project.findUnique({
         where:{
             id:projectId
@@ -16,6 +16,21 @@ const createTask = async (req:Request,res:Response)=>{
         message: "Project not found"
     });
 }
+    const membership = await prisma.projectMember.findUnique({
+        where:{
+            userId_projectId:{
+                userId,
+                projectId
+            }
+        }
+    });
+    if (!membership) {
+    return res.status(403).json({
+        message: "You are not a member of this project"
+    });
+}
+
+    
     const task = await prisma.task.create({
         data:{
         title,
@@ -39,15 +54,26 @@ catch(error){
 
 const getTasks = async (req: Request, res: Response) => {
     try{
+        const userId = req.user!.userId;
  const tasks = await prisma.task.findMany({
-    include:{project:{
-        select:{
-            id:true,
-            name:true
+    where: {
+        project: {
+            members: {
+                some: {
+                    userId: userId
+                }
+            }
         }
-    }}
-  
- });
+    },
+    include: {
+        project: {
+            select: {
+                id: true,
+                name: true
+            }
+        }
+    }
+});
  res.json({
     tasks
  })}
