@@ -60,10 +60,13 @@ if (!secret) {
 }
 const payload = {userId:user.id,username:user.name};
 const token = jwt.sign(payload,secret);
- 
+res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax"
+});
 res.status(200).json({
     message: "Login successful",
-    token:token
+
 })
     }
     catch(error){

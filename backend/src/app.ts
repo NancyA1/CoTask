@@ -4,7 +4,14 @@ import taskRoutes from "./routes/taskRoutes";
 import authRoutes from "./routes/authRoutes";
 import projectMemberRoutes from "./routes/projectMemberRoutes";
 import taskAssignmentRoutes from "./routes/taskAssignmentRoutes";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 const app = express();
+app.use(cors({
+    origin: "http://localhost:3001",
+    credentials: true
+}));
+app.use(cookieParser());
 
 app.use(express.json());
 
