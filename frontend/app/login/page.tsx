@@ -2,11 +2,12 @@
 import { useState } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage(){
   const [email,setEmail]= useState("");
   const [password,setPassword] = useState("");
-
+  const router = useRouter();
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     const response = await fetch("http://localhost:3000/api/auth/login",{
@@ -58,7 +59,11 @@ export default function LoginPage(){
         />
 
        </div>
-       <button type="submit" id="mybtn"> Sign In</button>
+       <button type="submit" id="mybtn" onClick={()=> router.push('/dashboard')}>
+        
+         Sign In
+         
+         </button>
        </form>
        <p>Don't have an account? <Link id="register" href={"/register"}>Register Now</Link> </p>
        {/* <button type="submit" id="register-btn" >Register Now</button> */}
