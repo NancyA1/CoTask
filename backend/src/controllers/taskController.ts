@@ -52,38 +52,89 @@ catch(error){
 }
 }
 
+// const getTasks = async (req: Request, res: Response) => {
+//     try{
+//         const userId = req.user!.userId;
+//  const tasks = await prisma.task.findMany({
+//     where: {
+//         project: {
+//             members: {
+//                 some: {
+//                     userId: userId
+//                 }
+//             }
+//         }
+//     },
+//     include: {
+//         project: {
+//             select: {
+//                 id: true,
+//                 name: true
+//             }
+//         }
+//     }
+// });
+//  res.json({
+//     tasks
+//  })}
+
+//  catch(error){
+//     res.status(500).json({
+//             message: "Something went wrong"
+//         });
+//  }
+// }
+
 const getTasks = async (req: Request, res: Response) => {
-    try{
+    try {
         const userId = req.user!.userId;
- const tasks = await prisma.task.findMany({
-    where: {
-        project: {
-            members: {
-                some: {
-                    userId: userId
+
+        const tasks = await prisma.task.findMany({
+            where: {
+                project: {
+                    members: {
+                        some: {
+                            userId: userId
+                        }
+                    }
+                }
+            },
+
+            include: {
+                project: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+
+                assignments: {
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                email: true
+                            }
+                        }
+                    }
                 }
             }
-        }
-    },
-    include: {
-        project: {
-            select: {
-                id: true,
-                name: true
-            }
-        }
-    }
-});
- res.json({
-    tasks
- })}
+        });
 
- catch(error){
-    res.status(500).json({
+        res.json({
+            tasks
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
             message: "Something went wrong"
         });
- }
-}
+    }
+};
+
 const getTaskById = async (req: Request, res: Response) => {
     try{
 const id = Number(req.params.id);

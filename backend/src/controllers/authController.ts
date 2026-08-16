@@ -75,7 +75,28 @@ res.status(200).json({
         });
     }
 };
+const getUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await prisma.user.findMany({
+            select: {
+                id: true,
+                name: true,
+                email: true
+            }
+        });
+
+        res.status(200).json({
+            users
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
 
 
-
-export{register,login}
+export { register, login, getUsers };
