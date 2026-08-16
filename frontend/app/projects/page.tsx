@@ -54,7 +54,7 @@ useEffect(() => {
               <h2>Your Projects</h2>
             </div>
           </div>
-          
+
         {loading && <p>Loading projects...</p>}
 
 {error && <p>{error}</p>}
@@ -63,14 +63,14 @@ useEffect(() => {
 
             {projects.map((project) => (
   <ProjectCard
-    key={project.id}
-    id={project.id}
-    name={project.name}
-    description={project.description}
-    progress={0}
-    members={0}
-    tasks={0}
-  />
+  key={project.id}
+  id={project.id}
+  name={project.name}
+  description={project.description}
+  progress={0}
+  members={project.members.length}
+  tasks={project.tasks.length}
+/>
 ))}
 
           </div>
