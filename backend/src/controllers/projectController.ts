@@ -86,10 +86,24 @@ const getProjectById = async (req: Request, res: Response) => {
         const userId = req.user!.userId;
 
         const project = await prisma.project.findUnique({
-            where: {
-                id
+    where: {
+        id
+    },
+    include: {
+        members: {
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
+                }
             }
-        });
+        },
+        tasks: true
+    }
+});
 
         if (!project) {
             return res.status(404).json({
@@ -112,7 +126,6 @@ if (!membership) {
 }
 
         
-
         res.json({
             project
         });
