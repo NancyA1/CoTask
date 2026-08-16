@@ -1,12 +1,14 @@
-import Image from "next/image";
-import LoginPage from "./login/page";
+
+import Hero from "./components/Hero";
+import Navbar from "./components/Navbar";
+import ProductPreview from "./components/ProductPreview";
 
 export default function Home() {
   return (
   <>                   
-  
-  <LoginPage/>
-  
+  <Navbar/>
+  <Hero/>
+  <ProductPreview/>
   
   </>
   
