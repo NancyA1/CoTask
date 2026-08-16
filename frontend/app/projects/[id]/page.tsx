@@ -14,6 +14,16 @@ type ProjectMember = {
     email: string;
   };
 };
+type TaskAssignment = {
+  userId: number;
+  taskId: number;
+  assignedAt: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+};
 
 type Task = {
   id: number;
@@ -23,8 +33,8 @@ type Task = {
   priority: string;
   dueDate: string | null;
   projectId: number;
+  assignments: TaskAssignment[];
 };
-
 type Project = {
   id: number;
   name: string;
@@ -66,6 +76,22 @@ export default function ProjectPage() {
 
   const [updatingTask, setUpdatingTask] = useState(false);
   const [editTaskError, setEditTaskError] = useState("");
+const [showAssignModal, setShowAssignModal] = useState(false);
+const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+const [selectedUserId, setSelectedUserId] = useState("");
+const [assigningTask, setAssigningTask] = useState(false);
+const [assignError, setAssignError] = useState("");
+const [showAddMemberModal, setShowAddMemberModal] = useState(false);
+const [users, setUsers] = useState<
+  {
+    id: number;
+    name: string;
+    email: string;
+  }[]
+>([]);
+const [selectedMemberId, setSelectedMemberId] = useState("");
+const [addingMember, setAddingMember] = useState(false);
+const [memberError, setMemberError] = useState("");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -110,6 +136,24 @@ export default function ProjectPage() {
               task.projectId === Number(params.id)
           )
         );
+
+        const usersResponse = await fetch(
+  "http://localhost:3000/api/auth/users",
+  {
+    credentials: "include",
+  }
+);
+
+const usersData = await usersResponse.json();
+
+if (!usersResponse.ok) {
+  setError(
+    usersData.message || "Failed to load users"
+  );
+  return;
+}
+
+setUsers(usersData.users);
       } catch (error) {
         console.error(error);
 
@@ -171,9 +215,12 @@ export default function ProjectPage() {
       }
 
       setTasks((currentTasks) => [
-        ...currentTasks,
-        data.task,
-      ]);
+  ...currentTasks,
+  {
+    ...data.task,
+    assignments: [],
+  },
+]);
 
       setTaskTitle("");
       setTaskDescription("");
@@ -321,7 +368,179 @@ export default function ProjectPage() {
   if (!project) {
     return <p>Project not found.</p>;
   }
+const handleAssignTask = async (
+  event: React.FormEvent
+) => {
+  event.preventDefault();
 
+  setAssignError("");
+
+  if (!selectedTask) {
+    return;
+  }
+
+  if (!selectedUserId) {
+    setAssignError("Please select a member");
+    return;
+  }
+
+  try {
+    setAssigningTask(true);
+
+    const response = await fetch(
+      `http://localhost:3000/api/tasks/${selectedTask.id}/assign`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          userId: Number(selectedUserId),
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setAssignError(
+        data.message || "Failed to assign user"
+      );
+      return;
+    }
+
+    const assignedMember = project.members.find(
+      (member) =>
+        member.userId === Number(selectedUserId)
+    );
+
+    if (!assignedMember) {
+      return;
+    }
+
+    setTasks((currentTasks) =>
+      currentTasks.map((task) => {
+        if (task.id !== selectedTask.id) {
+          return task;
+        }
+
+        return {
+          ...task,
+          assignments: [
+            ...task.assignments,
+            {
+              userId: assignedMember.userId,
+              taskId: task.id,
+              assignedAt: new Date().toISOString(),
+              user: {
+                id: assignedMember.user.id,
+                name: assignedMember.user.name,
+                email: assignedMember.user.email,
+              },
+            },
+          ],
+        };
+      })
+    );
+
+    setSelectedUserId("");
+    setSelectedTask(null);
+    setShowAssignModal(false);
+
+  } catch (error) {
+    console.error(error);
+    setAssignError(
+      "Something went wrong while assigning the task"
+    );
+  } finally {
+    setAssigningTask(false);
+  }
+};
+const handleAddMember = async (
+  event: React.FormEvent
+) => {
+  event.preventDefault();
+
+  setMemberError("");
+
+  if (!selectedMemberId) {
+    setMemberError("Please select a user");
+    return;
+  }
+
+  try {
+    setAddingMember(true);
+
+    const response = await fetch(
+      `http://localhost:3000/api/projects/${params.id}/members`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          userId: Number(selectedMemberId),
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      setMemberError(
+        data.message || "Failed to add member"
+      );
+      return;
+    }
+
+    const addedUser = users.find(
+      (user) =>
+        user.id === Number(selectedMemberId)
+    );
+
+    if (!addedUser) {
+      return;
+    }
+
+    setProject((currentProject) => {
+      if (!currentProject) {
+        return currentProject;
+      }
+
+      return {
+        ...currentProject,
+        members: [
+          ...currentProject.members,
+          {
+            userId: addedUser.id,
+            projectId: Number(params.id),
+            role: "member",
+            joinedAt: new Date().toISOString(),
+            user: {
+              id: addedUser.id,
+              name: addedUser.name,
+              email: addedUser.email,
+            },
+          },
+        ],
+      };
+    });
+
+    setSelectedMemberId("");
+    setShowAddMemberModal(false);
+
+  } catch (error) {
+    console.error(error);
+
+    setMemberError(
+      "Something went wrong while adding the member"
+    );
+  } finally {
+    setAddingMember(false);
+  }
+};
   return (
     <main className="project-page">
 
@@ -497,7 +716,17 @@ export default function ProjectPage() {
                         >
                           Edit
                         </button>
-
+                        <button
+  className="edit-task-button"
+  onClick={() => {
+    setSelectedTask(task);
+    setSelectedUserId("");
+    setAssignError("");
+    setShowAssignModal(true);
+  }}
+>
+  Assign
+</button>
                         <button
                           className="delete-task-button"
                           onClick={() =>
@@ -517,7 +746,20 @@ export default function ProjectPage() {
                     {task.description && (
                       <p>{task.description}</p>
                     )}
+{task.assignments.length > 0 && (
+  <div className="task-assignees">
+    <span>Assigned to:</span>
 
+    {task.assignments.map((assignment) => (
+      <span
+        className="task-assignee"
+        key={`${assignment.userId}-${assignment.taskId}`}
+      >
+        {assignment.user.name}
+      </span>
+    ))}
+  </div>
+)}
                   </div>
 
                 ))}
@@ -581,7 +823,17 @@ export default function ProjectPage() {
                         >
                           Edit
                         </button>
-
+<button
+  className="edit-task-button"
+  onClick={() => {
+    setSelectedTask(task);
+    setSelectedUserId("");
+    setAssignError("");
+    setShowAssignModal(true);
+  }}
+>
+  Assign
+</button>
                         <button
                           className="delete-task-button"
                           onClick={() =>
@@ -601,7 +853,20 @@ export default function ProjectPage() {
                     {task.description && (
                       <p>{task.description}</p>
                     )}
+{task.assignments.length > 0 && (
+  <div className="task-assignees">
+    <span>Assigned to:</span>
 
+    {task.assignments.map((assignment) => (
+      <span
+        className="task-assignee"
+        key={`${assignment.userId}-${assignment.taskId}`}
+      >
+        {assignment.user.name}
+      </span>
+    ))}
+  </div>
+)}
                   </div>
 
                 ))}
@@ -663,7 +928,17 @@ export default function ProjectPage() {
                         >
                           Edit
                         </button>
-
+  <button
+  className="edit-task-button"
+  onClick={() => {
+    setSelectedTask(task);
+    setSelectedUserId("");
+    setAssignError("");
+    setShowAssignModal(true);
+  }}
+>
+  Assign
+</button>
                         <button
                           className="delete-task-button"
                           onClick={() =>
@@ -683,7 +958,20 @@ export default function ProjectPage() {
                     {task.description && (
                       <p>{task.description}</p>
                     )}
+{task.assignments.length > 0 && (
+  <div className="task-assignees">
+    <span>Assigned to:</span>
 
+    {task.assignments.map((assignment) => (
+      <span
+        className="task-assignee"
+        key={`${assignment.userId}-${assignment.taskId}`}
+      >
+        {assignment.user.name}
+      </span>
+    ))}
+  </div>
+)}
                   </div>
 
                 ))}
@@ -701,19 +989,28 @@ export default function ProjectPage() {
 
       <section className="project-members-section">
 
-        <div className="board-heading">
+       <div className="board-heading">
 
-          <div>
+  <div>
+    <span className="section-eyebrow">
+      Team
+    </span>
 
-            <span className="section-eyebrow">
-              Team
-            </span>
+    <h2>Members</h2>
+  </div>
 
-            <h2>Members</h2>
+  <button
+    className="add-task-button"
+    onClick={() => {
+      setMemberError("");
+      setSelectedMemberId("");
+      setShowAddMemberModal(true);
+    }}
+  >
+    + Add Member
+  </button>
 
-          </div>
-
-        </div>
+</div>
 
 
         <div className="members-grid">
@@ -1180,7 +1477,195 @@ export default function ProjectPage() {
         </div>
 
       )}
+{showAssignModal && selectedTask && (
+  <div
+    className="modal-overlay"
+    onClick={() => setShowAssignModal(false)}
+  >
 
+    <div
+      className="task-modal"
+      onClick={(event) =>
+        event.stopPropagation()
+      }
+    >
+
+      <div className="modal-header">
+
+        <div>
+          <span className="section-eyebrow">
+            Assign Task
+          </span>
+
+          <h2>Assign a member</h2>
+        </div>
+
+        <button
+          className="modal-close"
+          onClick={() =>
+            setShowAssignModal(false)
+          }
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <p>
+        Assign <strong>{selectedTask.title}</strong>{" "}
+        to a project member.
+      </p>
+
+
+      <form onSubmit={handleAssignTask}>
+
+        <div className="form-group">
+
+          <label htmlFor="task-member">
+            Project member
+          </label>
+
+          <select
+            id="task-member"
+            value={selectedUserId}
+            onChange={(event) =>
+              setSelectedUserId(
+                event.target.value
+              )
+            }
+          >
+
+            <option value="">
+              Select a member
+            </option>
+
+            {project.members.map((member) => (
+              <option
+                key={member.userId}
+                value={member.userId}
+              >
+                {member.user.name} (
+                {member.user.email})
+              </option>
+            ))}
+
+          </select>
+
+        </div>
+
+
+        {assignError && (
+          <p className="task-form-error">
+            {assignError}
+          </p>
+        )}
+
+
+        <button
+          type="submit"
+          className="create-task-button"
+          disabled={assigningTask}
+        >
+          {assigningTask
+            ? "Assigning..."
+            : "Assign Task"}
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+)}
+{showAddMemberModal && (
+  <div
+    className="modal-overlay"
+    onClick={() => setShowAddMemberModal(false)}
+  >
+    <div
+      className="task-modal"
+      onClick={(event) =>
+        event.stopPropagation()
+      }
+    >
+      <div className="modal-header">
+
+        <div>
+          <span className="section-eyebrow">
+            Team
+          </span>
+
+          <h2>Add a member</h2>
+        </div>
+
+        <button
+          className="modal-close"
+          onClick={() =>
+            setShowAddMemberModal(false)
+          }
+        >
+          ×
+        </button>
+
+      </div>
+
+      <form onSubmit={handleAddMember}>
+
+        <div className="form-group">
+
+          <label htmlFor="project-member">
+            Select a user
+          </label>
+
+          <select
+            id="project-member"
+            value={selectedMemberId}
+            onChange={(event) =>
+              setSelectedMemberId(
+                event.target.value
+              )
+            }
+          >
+
+            <option value="">
+              Select a user
+            </option>
+
+            {users.map((user) => (
+              <option
+                key={user.id}
+                value={user.id}
+              >
+                {user.name} ({user.email})
+              </option>
+            ))}
+
+          </select>
+
+        </div>
+
+        {memberError && (
+          <p className="task-form-error">
+            {memberError}
+          </p>
+        )}
+
+        <button
+  type="submit"
+  className="create-task-button"
+  disabled={addingMember}
+>
+  {addingMember
+    ? "Adding..."
+    : "Add Member"}
+</button>
+
+      </form>
+
+    </div>
+  </div>
+)}
     </main>
   );
 }

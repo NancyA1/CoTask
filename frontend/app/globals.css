@@ -3800,3 +3800,23 @@ color: #D98268;
   background: #f3f4f6;
   color: #111827;
 }
+
+.task-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.task-assignees {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.task-assignee {
+  font-weight: 600;
+  color: #111827;
+}
