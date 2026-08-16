@@ -1,7 +1,44 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import ProjectsHeader from "../components/ProjectsHeader";
 import ProjectCard from "../components/ProjectCard";
 
 export default function Projects() {
+    const [projects, setProjects] = useState<any[]>([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState("");
+
+useEffect(() => {
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/projects",
+        {
+          credentials: "include",
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Failed to load projects");
+        return;
+      }
+
+      setProjects(data.projects);
+
+    } catch (error) {
+      console.error(error);
+      setError("Something went wrong while loading projects");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProjects();
+}, []);
+
   return (
     <div className="dashboard">
 
@@ -17,35 +54,24 @@ export default function Projects() {
               <h2>Your Projects</h2>
             </div>
           </div>
+          
+        {loading && <p>Loading projects...</p>}
+
+{error && <p>{error}</p>}
 
           <div className="projects-grid">
 
-            <ProjectCard
-              id={1}
-              name="CoTask Website"
-              description="Build and launch the CoTask productivity platform."
-              progress={72}
-              members={3}
-              tasks={8}
-            />
-
-            <ProjectCard
-              id={2}
-              name="Portfolio Website"
-              description="Build and launch a personal developer portfolio."
-              progress={45}
-              members={2}
-              tasks={12}
-            />
-
-            <ProjectCard
-              id={3}
-              name="API Development"
-              description="Authentication and backend API implementation."
-              progress={100}
-              members={2}
-              tasks={15}
-            />
+            {projects.map((project) => (
+  <ProjectCard
+    key={project.id}
+    id={project.id}
+    name={project.name}
+    description={project.description}
+    progress={0}
+    members={0}
+    tasks={0}
+  />
+))}
 
           </div>
 

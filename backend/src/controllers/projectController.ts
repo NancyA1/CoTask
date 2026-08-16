@@ -4,16 +4,19 @@ import prisma from "../config/prisma";
 const getProjects = async (req: Request, res: Response) => {
     try {
         const userId = req.user!.userId;
-        const projects = await prisma.project.findMany({
+       const projects = await prisma.project.findMany({
     where: {
         members: {
             some: {
                 userId: userId
             }
         }
+    },
+    include: {
+        members: true,
+        tasks: true
     }
 });
-
         res.json({
             message: "all projects",
             projects
