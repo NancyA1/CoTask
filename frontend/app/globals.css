@@ -2134,3 +2134,158 @@ color: #D98268;
     gap: 10px;
   }
 }
+/* register page  */
+.register-page {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+
+  background: url("/Work life balance-pana.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.register-header {
+  position: absolute;
+
+  top: 40px;
+  left: 40px;
+
+  display: flex;
+  align-items: center;
+}
+
+.register-header h1 {
+  margin: 0;
+
+  color: #D98268;
+
+  font-size: 35px;
+  font-weight: 700;
+}
+
+.register-content {
+  width: 100%;
+  max-width: 440px;
+
+  padding: 40px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  backdrop-filter: blur(10px);
+
+  border: 1px solid #EADDD6;
+  border-radius: 20px;
+
+  box-shadow:
+    0 4px 6px -1px rgba(217, 130, 104, 0.05),
+    0 20px 40px -5px rgba(217, 130, 104, 0.15);
+}
+
+.register-content h2 {
+  margin: 0 0 20px;
+
+  color: #332B2B;
+
+  font-size: 28px;
+  font-weight: 600;
+
+  text-align: center;
+}
+
+.register-content .form-field {
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  gap: 10px;
+
+  margin-bottom: 8px;
+}
+
+.register-content .form-field label {
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #29252A;
+}
+
+.register-content .form-field input {
+  width: 100%;
+
+  padding: 12px 14px;
+
+  border: 1px solid #EADDD6;
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  outline: none;
+
+  background-color: #FFFDFC;
+
+  transition: all 0.2s ease-in-out;
+}
+
+.register-content .form-field input:focus {
+  border-color: #D98268;
+
+  background-color: #FFFFFF;
+
+  box-shadow: 0 0 0 4px rgba(217, 130, 104, 0.2);
+}
+
+#register-submit {
+  width: 100%;
+
+  padding: 12px;
+
+  margin-top: 10px;
+
+  border: none;
+  border-radius: 10px;
+
+  background-color: #EFA58B;
+
+  color: #332B2B;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+#register-submit:hover {
+  background-color: #D98268;
+
+  transform: translateY(-2px);
+}
+
+#login-link {
+  color: #332B2B;
+
+  text-decoration: none;
+
+  font-weight: 600;
+}
+
+#login-link:hover {
+  color: #D98268;
+
+  text-decoration: underline;
+}
