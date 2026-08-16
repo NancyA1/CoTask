@@ -3322,6 +3322,146 @@ color: #D98268;
 }
 
 
+.project-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.open-project-button,
+.edit-project-button,
+.delete-project-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.2s ease;
+  box-sizing: border-box;
+}
+
+.open-project-button {
+  background: #111827;
+  color: white;
+}
+
+.open-project-button:hover {
+  background: #1f2937;
+}
+
+.edit-project-button {
+  background: #f1f5f9;
+  color: #334155;
+  border: none;
+  margin: 0;
+}
+
+.edit-project-button:hover {
+  background: #e2e8f0;
+}
+
+.delete-project-button {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  margin: 0;
+}
+
+.delete-project-button:hover {
+  background: #fecaca;
+}
+.edit-project-form {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid #e5d8d2;
+  border-radius: 12px;
+  background: #fff8f3;
+}
+
+.edit-project-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #332b2b;
+  margin-bottom: 16px;
+}
+
+.edit-project-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.edit-project-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6f5d57;
+}
+
+.edit-project-form input,
+.edit-project-form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e4d5ce;
+  border-radius: 8px;
+  background: white;
+  color: #332b2b;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.edit-project-form input:focus,
+.edit-project-form textarea:focus {
+  border-color: #d98268;
+  box-shadow: 0 0 0 3px rgba(217, 130, 104, 0.12);
+}
+
+.edit-project-form textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.edit-project-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.save-project-button,
+.cancel-project-button {
+  border: none;
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.save-project-button {
+  background: #efa58b;
+  color: #332b2b;
+}
+
+.save-project-button:hover {
+  background: #d98268;
+}
+
+.cancel-project-button {
+  background: #f3e8e3;
+  color: #6f5d57;
+}
+
+.cancel-project-button:hover {
+  background: #ead8d0;
+}
 /* RESPONSIVE */
 
 @media (max-width: 900px) {

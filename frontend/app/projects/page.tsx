@@ -37,6 +37,13 @@ useEffect(() => {
 
   fetchProjects();
 }, []);
+const handleDeleteProject = (id: number) => {
+  setProjects((currentProjects) =>
+    currentProjects.filter(
+      (project) => project.id !== id
+    )
+  );
+};
 
   return (
     <div className="dashboard">
@@ -61,14 +68,15 @@ useEffect(() => {
           <div className="projects-grid">
 
             {projects.map((project) => (
-  <ProjectCard
+ <ProjectCard
   key={project.id}
   id={project.id}
   name={project.name}
   description={project.description}
- progress={project.progress}
+  progress={project.progress}
   members={project.members.length}
   tasks={project.tasks.length}
+  onDelete={handleDeleteProject}
 />
 ))}
 
