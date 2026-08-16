@@ -20,7 +20,6 @@ useEffect(() => {
       );
 
       const data = await response.json();
-
       if (!response.ok) {
         setError(data.message || "Failed to load projects");
         return;
@@ -67,7 +66,7 @@ useEffect(() => {
   id={project.id}
   name={project.name}
   description={project.description}
-  progress={0}
+ progress={project.progress}
   members={project.members.length}
   tasks={project.tasks.length}
 />

@@ -17,9 +17,26 @@ const getProjects = async (req: Request, res: Response) => {
         tasks: true
     }
 });
+const projectsWithProgress = projects.map((project) => {
+    const totalTasks = project.tasks.length;
+
+    const completedTasks = project.tasks.filter(
+        (task) => task.status === "done"
+    ).length;
+
+    const progress =
+        totalTasks === 0
+            ? 0
+            : Math.round((completedTasks / totalTasks) * 100);
+
+    return {
+        ...project,
+        progress,
+    };
+});
         res.json({
             message: "all projects",
-            projects
+            projects: projectsWithProgress
         });
     } catch (error) {
         console.log(error);
