@@ -41,6 +41,7 @@ export default function ProjectPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // CREATE TASK
   const [showTaskModal, setShowTaskModal] = useState(false);
 
   const [taskTitle, setTaskTitle] = useState("");
@@ -51,6 +52,20 @@ export default function ProjectPage() {
 
   const [creatingTask, setCreatingTask] = useState(false);
   const [taskError, setTaskError] = useState("");
+
+  // EDIT TASK
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+
+  const [editTaskTitle, setEditTaskTitle] = useState("");
+  const [editTaskDescription, setEditTaskDescription] =
+    useState("");
+  const [editTaskStatus, setEditTaskStatus] = useState("todo");
+  const [editTaskPriority, setEditTaskPriority] =
+    useState("medium");
+  const [editTaskDueDate, setEditTaskDueDate] = useState("");
+
+  const [updatingTask, setUpdatingTask] = useState(false);
+  const [editTaskError, setEditTaskError] = useState("");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -65,7 +80,9 @@ export default function ProjectPage() {
         const data = await response.json();
 
         if (!response.ok) {
-          setError(data.message || "Failed to load project");
+          setError(
+            data.message || "Failed to load project"
+          );
           return;
         }
 
@@ -81,7 +98,9 @@ export default function ProjectPage() {
         const tasksData = await tasksResponse.json();
 
         if (!tasksResponse.ok) {
-          setError(tasksData.message || "Failed to load tasks");
+          setError(
+            tasksData.message || "Failed to load tasks"
+          );
           return;
         }
 
@@ -93,6 +112,7 @@ export default function ProjectPage() {
         );
       } catch (error) {
         console.error(error);
+
         setError(
           "Something went wrong while loading the project"
         );
@@ -103,18 +123,6 @@ export default function ProjectPage() {
 
     fetchProject();
   }, [params.id]);
-
-  if (loading) {
-    return <p>Loading project...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  if (!project) {
-    return <p>Project not found.</p>;
-  }
 
   const handleCreateTask = async (
     event: React.FormEvent
@@ -176,6 +184,7 @@ export default function ProjectPage() {
       setShowTaskModal(false);
     } catch (error) {
       console.error(error);
+
       setTaskError("Something went wrong");
     } finally {
       setCreatingTask(false);
@@ -208,14 +217,115 @@ export default function ProjectPage() {
       );
     } catch (error) {
       console.error(error);
+
       alert(
         "Something went wrong while deleting the task"
       );
     }
   };
 
+  const handleEditTask = (task: Task) => {
+    setEditingTask(task);
+
+    setEditTaskTitle(task.title);
+    setEditTaskDescription(task.description || "");
+    setEditTaskStatus(task.status);
+    setEditTaskPriority(task.priority);
+
+    setEditTaskDueDate(
+      task.dueDate
+        ? task.dueDate.split("T")[0]
+        : ""
+    );
+
+    setEditTaskError("");
+  };
+
+  const handleUpdateTask = async (
+    event: React.FormEvent
+  ) => {
+    event.preventDefault();
+
+    setEditTaskError("");
+
+    if (!editingTask) {
+      return;
+    }
+
+    if (!editTaskTitle.trim()) {
+      setEditTaskError("Task title is required");
+      return;
+    }
+
+    try {
+      setUpdatingTask(true);
+
+      const response = await fetch(
+        `http://localhost:3000/api/tasks/${editingTask.id}`,
+        {
+          method: "PUT",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          credentials: "include",
+
+          body: JSON.stringify({
+            title: editTaskTitle,
+            description: editTaskDescription,
+            status: editTaskStatus,
+            priority: editTaskPriority,
+            dueDate: editTaskDueDate || null,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setEditTaskError(
+          data.message || "Failed to update task"
+        );
+        return;
+      }
+
+      setTasks((currentTasks) =>
+        currentTasks.map((task) =>
+          task.id === editingTask.id
+            ? data.updatedTask
+            : task
+        )
+      );
+
+      setEditingTask(null);
+    } catch (error) {
+      console.error(error);
+
+      setEditTaskError(
+        "Something went wrong while updating the task"
+      );
+    } finally {
+      setUpdatingTask(false);
+    }
+  };
+
+  if (loading) {
+    return <p>Loading project...</p>;
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
+
+  if (!project) {
+    return <p>Project not found.</p>;
+  }
+
   return (
     <main className="project-page">
+
+      {/* HEADER */}
 
       <div className="project-page-header">
 
@@ -245,7 +355,9 @@ export default function ProjectPage() {
 
         <button
           className="add-task-button"
-          onClick={() => setShowTaskModal(true)}
+          onClick={() =>
+            setShowTaskModal(true)
+          }
         >
           + Add Task
         </button>
@@ -253,9 +365,12 @@ export default function ProjectPage() {
       </div>
 
 
+      {/* PROJECT STATS */}
+
       <div className="project-stats">
 
         <div className="project-stat">
+
           <span className="stat-label">
             Status
           </span>
@@ -263,10 +378,12 @@ export default function ProjectPage() {
           <span className="stat-value">
             Active
           </span>
+
         </div>
 
 
         <div className="project-stat">
+
           <span className="stat-label">
             Tasks
           </span>
@@ -274,10 +391,12 @@ export default function ProjectPage() {
           <span className="stat-value">
             {tasks.length}
           </span>
+
         </div>
 
 
         <div className="project-stat">
+
           <span className="stat-label">
             Members
           </span>
@@ -285,10 +404,12 @@ export default function ProjectPage() {
           <span className="stat-value">
             {project.members.length}
           </span>
+
         </div>
 
 
         <div className="project-stat">
+
           <span className="stat-label">
             Progress
           </span>
@@ -296,27 +417,33 @@ export default function ProjectPage() {
           <span className="stat-value">
             0%
           </span>
+
         </div>
 
       </div>
 
+
+      {/* PROJECT BOARD */}
 
       <section className="project-board-section">
 
         <div className="board-heading">
 
           <div>
+
             <span className="section-eyebrow">
               Workspace
             </span>
 
             <h2>Project Board</h2>
+
           </div>
 
         </div>
 
 
         <div className="task-board">
+
 
           {/* TO DO */}
 
@@ -329,7 +456,8 @@ export default function ProjectPage() {
               <span>
                 {
                   tasks.filter(
-                    (task) => task.status === "todo"
+                    (task) =>
+                      task.status === "todo"
                   ).length
                 }
               </span>
@@ -341,7 +469,8 @@ export default function ProjectPage() {
 
               {tasks
                 .filter(
-                  (task) => task.status === "todo"
+                  (task) =>
+                    task.status === "todo"
                 )
                 .map((task) => (
 
@@ -358,14 +487,27 @@ export default function ProjectPage() {
                         {task.priority}
                       </span>
 
-                      <button
-                        className="delete-task-button"
-                        onClick={() =>
-                          handleDeleteTask(task.id)
-                        }
-                      >
-                        Delete
-                      </button>
+                      <div>
+
+                        <button
+                          className="edit-task-button"
+                          onClick={() =>
+                            handleEditTask(task)
+                          }
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="delete-task-button"
+                          onClick={() =>
+                            handleDeleteTask(task.id)
+                          }
+                        >
+                          Delete
+                        </button>
+
+                      </div>
 
                     </div>
 
@@ -397,7 +539,8 @@ export default function ProjectPage() {
                 {
                   tasks.filter(
                     (task) =>
-                      task.status === "in_progress"
+                      task.status ===
+                      "in_progress"
                   ).length
                 }
               </span>
@@ -410,7 +553,8 @@ export default function ProjectPage() {
               {tasks
                 .filter(
                   (task) =>
-                    task.status === "in_progress"
+                    task.status ===
+                    "in_progress"
                 )
                 .map((task) => (
 
@@ -427,14 +571,27 @@ export default function ProjectPage() {
                         {task.priority}
                       </span>
 
-                      <button
-                        className="delete-task-button"
-                        onClick={() =>
-                          handleDeleteTask(task.id)
-                        }
-                      >
-                        Delete
-                      </button>
+                      <div>
+
+                        <button
+                          className="edit-task-button"
+                          onClick={() =>
+                            handleEditTask(task)
+                          }
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="delete-task-button"
+                          onClick={() =>
+                            handleDeleteTask(task.id)
+                          }
+                        >
+                          Delete
+                        </button>
+
+                      </div>
 
                     </div>
 
@@ -465,7 +622,8 @@ export default function ProjectPage() {
               <span>
                 {
                   tasks.filter(
-                    (task) => task.status === "done"
+                    (task) =>
+                      task.status === "done"
                   ).length
                 }
               </span>
@@ -477,7 +635,8 @@ export default function ProjectPage() {
 
               {tasks
                 .filter(
-                  (task) => task.status === "done"
+                  (task) =>
+                    task.status === "done"
                 )
                 .map((task) => (
 
@@ -494,14 +653,27 @@ export default function ProjectPage() {
                         {task.priority}
                       </span>
 
-                      <button
-                        className="delete-task-button"
-                        onClick={() =>
-                          handleDeleteTask(task.id)
-                        }
-                      >
-                        Delete
-                      </button>
+                      <div>
+
+                        <button
+                          className="edit-task-button"
+                          onClick={() =>
+                            handleEditTask(task)
+                          }
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          className="delete-task-button"
+                          onClick={() =>
+                            handleDeleteTask(task.id)
+                          }
+                        >
+                          Delete
+                        </button>
+
+                      </div>
 
                     </div>
 
@@ -627,7 +799,9 @@ export default function ProjectPage() {
             </div>
 
 
-            <form onSubmit={handleCreateTask}>
+            <form
+              onSubmit={handleCreateTask}
+            >
 
               <div className="form-group">
 
@@ -641,7 +815,9 @@ export default function ProjectPage() {
                   placeholder="e.g. Build login page"
                   value={taskTitle}
                   onChange={(event) =>
-                    setTaskTitle(event.target.value)
+                    setTaskTitle(
+                      event.target.value
+                    )
                   }
                 />
 
@@ -739,27 +915,27 @@ export default function ProjectPage() {
 
                 </div>
 
+              </div>
 
-                {/* DUE DATE */}
 
-                <div className="form-group">
+              {/* DUE DATE */}
 
-                  <label htmlFor="task-due-date">
-                    Due date
-                  </label>
+              <div className="form-group">
 
-                  <input
-                    id="task-due-date"
-                    type="date"
-                    value={taskDueDate}
-                    onChange={(event) =>
-                      setTaskDueDate(
-                        event.target.value
-                      )
-                    }
-                  />
+                <label htmlFor="task-due-date">
+                  Due date
+                </label>
 
-                </div>
+                <input
+                  id="task-due-date"
+                  type="date"
+                  value={taskDueDate}
+                  onChange={(event) =>
+                    setTaskDueDate(
+                      event.target.value
+                    )
+                  }
+                />
 
               </div>
 
@@ -778,11 +954,223 @@ export default function ProjectPage() {
                 className="create-task-button"
                 disabled={creatingTask}
               >
-
                 {creatingTask
                   ? "Creating..."
                   : "Create Task"}
+              </button>
 
+            </form>
+
+          </div>
+
+        </div>
+
+      )}
+
+
+      {/* EDIT TASK MODAL */}
+
+      {editingTask && (
+
+        <div
+          className="modal-overlay"
+          onClick={() =>
+            setEditingTask(null)
+          }
+        >
+
+          <div
+            className="task-modal"
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+
+            <div className="modal-header">
+
+              <div>
+
+                <span className="section-eyebrow">
+                  Edit Task
+                </span>
+
+                <h2>Update task</h2>
+
+              </div>
+
+
+              <button
+                className="modal-close"
+                onClick={() =>
+                  setEditingTask(null)
+                }
+              >
+                ×
+              </button>
+
+            </div>
+
+
+            <form
+              onSubmit={handleUpdateTask}
+            >
+
+              {/* TITLE */}
+
+              <div className="form-group">
+
+                <label htmlFor="edit-task-title">
+                  Task title
+                </label>
+
+                <input
+                  id="edit-task-title"
+                  type="text"
+                  value={editTaskTitle}
+                  onChange={(event) =>
+                    setEditTaskTitle(
+                      event.target.value
+                    )
+                  }
+                />
+
+              </div>
+
+
+              {/* DESCRIPTION */}
+
+              <div className="form-group">
+
+                <label htmlFor="edit-task-description">
+                  Description
+                </label>
+
+                <textarea
+                  id="edit-task-description"
+                  value={editTaskDescription}
+                  onChange={(event) =>
+                    setEditTaskDescription(
+                      event.target.value
+                    )
+                  }
+                />
+
+              </div>
+
+
+              <div className="form-row">
+
+                {/* STATUS */}
+
+                <div className="form-group">
+
+                  <label htmlFor="edit-task-status">
+                    Status
+                  </label>
+
+                  <select
+                    id="edit-task-status"
+                    value={editTaskStatus}
+                    onChange={(event) =>
+                      setEditTaskStatus(
+                        event.target.value
+                      )
+                    }
+                  >
+
+                    <option value="todo">
+                      To Do
+                    </option>
+
+                    <option value="in_progress">
+                      In Progress
+                    </option>
+
+                    <option value="done">
+                      Done
+                    </option>
+
+                  </select>
+
+                </div>
+
+
+                {/* PRIORITY */}
+
+                <div className="form-group">
+
+                  <label htmlFor="edit-task-priority">
+                    Priority
+                  </label>
+
+                  <select
+                    id="edit-task-priority"
+                    value={editTaskPriority}
+                    onChange={(event) =>
+                      setEditTaskPriority(
+                        event.target.value
+                      )
+                    }
+                  >
+
+                    <option value="low">
+                      Low
+                    </option>
+
+                    <option value="medium">
+                      Medium
+                    </option>
+
+                    <option value="high">
+                      High
+                    </option>
+
+                  </select>
+
+                </div>
+
+              </div>
+
+
+              {/* DUE DATE */}
+
+              <div className="form-group">
+
+                <label htmlFor="edit-task-due-date">
+                  Due date
+                </label>
+
+                <input
+                  id="edit-task-due-date"
+                  type="date"
+                  value={editTaskDueDate}
+                  onChange={(event) =>
+                    setEditTaskDueDate(
+                      event.target.value
+                    )
+                  }
+                />
+
+              </div>
+
+
+              {editTaskError && (
+
+                <p className="task-form-error">
+                  {editTaskError}
+                </p>
+
+              )}
+
+
+              <button
+                type="submit"
+                className="create-task-button"
+                disabled={updatingTask}
+              >
+                {updatingTask
+                  ? "Updating..."
+                  : "Update Task"}
               </button>
 
             </form>

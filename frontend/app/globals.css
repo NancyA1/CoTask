@@ -3750,11 +3750,24 @@ color: #D98268;
 }
 
 
+/* .task-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+} */
+
 .task-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+
+.task-card-top > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .delete-task-button {
@@ -3769,4 +3782,21 @@ color: #D98268;
 
 .delete-task-button:hover {
   text-decoration: underline;
+}
+
+.edit-task-button {
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.edit-task-button:hover {
+  background: #f3f4f6;
+  color: #111827;
 }
