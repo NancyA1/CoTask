@@ -25,8 +25,12 @@ onDelete,
   const [projectName, setProjectName] = useState(name);
   const [projectDescription, setProjectDescription] =
     useState(description);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [saving, setSaving] = useState(false);
+const [deleting, setDeleting] = useState(false);
   const handleUpdateProject = async () => {
     try {
+      setSaving(true);
       const response = await fetch(
         `http://localhost:3000/api/projects/${id}`,
         {
@@ -50,22 +54,18 @@ onDelete,
       }
 
       setEditing(false);
+      setSaving(false);
 
     } catch (error) {
       console.error(error);
+      setSaving(false);
       alert("Something went wrong while updating the project");
     }
   };
 const handleDeleteProject = async () => {
-  const confirmed = window.confirm(
-    "Are you sure you want to delete this project?"
-  );
-
-  if (!confirmed) {
-    return;
-  }
-
+  
   try {
+    setDeleting(true);
     const response = await fetch(
       `http://localhost:3000/api/projects/${id}`,
       {
@@ -81,7 +81,8 @@ const handleDeleteProject = async () => {
       return;
     }
 
-    alert("Project deleted successfully");
+    
+setShowDeleteModal(false);
     onDelete(id);
 
   } catch (error) {
@@ -141,11 +142,11 @@ const handleDeleteProject = async () => {
   </button>
 
   <button
-    className="delete-project-button"
-    onClick={handleDeleteProject}
-  >
-    Delete
-  </button>
+  className="delete-project-button"
+  onClick={() => setShowDeleteModal(true)}
+>
+  Delete
+</button>
 
 </div>
 {editing && (
@@ -181,13 +182,13 @@ const handleDeleteProject = async () => {
     <div className="edit-project-actions">
 
       <button
-        type="button"
-        className="save-project-button"
-        onClick={handleUpdateProject}
-      >
-        Save Changes
-      </button>
-
+  type="button"
+  className="save-project-button"
+  onClick={handleUpdateProject}
+  disabled={saving}
+>
+  {saving ? "Saving..." : "Save Changes"}
+</button>
       <button
         type="button"
         className="cancel-project-button"
@@ -195,6 +196,49 @@ const handleDeleteProject = async () => {
       >
         Cancel
       </button>
+
+    </div>
+
+  </div>
+)}
+
+{showDeleteModal && (
+  <div className="delete-modal-overlay">
+
+    <div className="delete-modal">
+
+      <div className="delete-modal-icon">
+        !
+      </div>
+
+      <h3>Delete project?</h3>
+
+      <p>
+        Are you sure you want to delete{" "}
+        <strong>{projectName}</strong>?
+        This action cannot be undone.
+      </p>
+
+      <div className="delete-modal-actions">
+
+        <button
+          type="button"
+          className="cancel-delete-button"
+          onClick={() => setShowDeleteModal(false)}
+        >
+          Cancel
+        </button>
+
+        <button
+  type="button"
+  className="confirm-delete-button"
+  onClick={handleDeleteProject}
+  disabled={deleting}
+>
+  {deleting ? "Deleting..." : "Delete Project"}
+</button>
+
+      </div>
 
     </div>
 

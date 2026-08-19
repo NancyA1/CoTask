@@ -1,6 +1,16 @@
 import Link from "next/link";
 
-export default function RecentProjects() {
+type RecentProjectsProps = {
+  projects: any[];
+  loading: boolean;
+};
+
+export default function RecentProjects({
+  projects,
+  loading,
+}: RecentProjectsProps) {
+  const recentProjects = projects.slice(0, 3);
+
   return (
     <section className="projects-section">
 
@@ -15,104 +25,77 @@ export default function RecentProjects() {
         </Link>
       </div>
 
+      {loading && <p>Loading projects...</p>}
+
+      {!loading && projects.length === 0 && (
+        <p>No projects yet.</p>
+      )}
+
       <div className="projects-grid">
 
-        <div className="project-card">
+        {recentProjects.map((project) => {
 
-          <div className="project-card-top">
-            <span className="project-icon">◈</span>
-            <span className="project-status">Active</span>
-          </div>
+          const tasks = project.tasks || [];
+          const members = project.members || [];
 
-          <h3>CoTask Website</h3>
+          const completedTasks = tasks.filter(
+            (task: any) => task.status === "done"
+          ).length;
 
-          <p>
-            Build and launch the CoTask productivity platform.
-          </p>
+          const progress =
+            tasks.length === 0
+              ? 0
+              : Math.round(
+                  (completedTasks / tasks.length) * 100
+                );
 
-          <div className="project-progress">
-            <div className="progress-info">
-              <span>Progress</span>
-              <span>72%</span>
-            </div>
+          return (
+            <Link
+              href={`/projects/${project.id}`}
+              className="project-card"
+              key={project.id}
+            >
 
-            <div className="progress-bar">
-              <div className="progress-fill progress-72"></div>
-            </div>
-          </div>
+              <div className="project-card-top">
+                <span className="project-icon">
+                  ◈
+                </span>
 
-          <div className="project-footer">
-            <span>8 tasks</span>
-            <span>3 members</span>
-          </div>
+                <span className="project-status">
+                  Active
+                </span>
+              </div>
 
-        </div>
+              <h3>{project.name}</h3>
 
+              <p>{project.description}</p>
 
-        <div className="project-card">
+              <div className="project-progress">
 
-          <div className="project-card-top">
-            <span className="project-icon">◇</span>
-            <span className="project-status">Active</span>
-          </div>
+                <div className="progress-info">
+                  <span>Progress</span>
+                  <span>{progress}%</span>
+                </div>
 
-          <h3>Mobile Application</h3>
+                <div className="progress-bar">
+                  <div
+                    className="progress-fill"
+                    style={{
+                      width: `${progress}%`,
+                    }}
+                  />
+                </div>
 
-          <p>
-            Plan the future mobile version of CoTask.
-          </p>
+              </div>
 
-          <div className="project-progress">
-            <div className="progress-info">
-              <span>Progress</span>
-              <span>45%</span>
-            </div>
+              <div className="project-footer">
+                <span>{tasks.length} tasks</span>
+                <span>{members.length} members</span>
+              </div>
 
-            <div className="progress-bar">
-              <div className="progress-fill progress-45"></div>
-            </div>
-          </div>
-
-          <div className="project-footer">
-            <span>12 tasks</span>
-            <span>4 members</span>
-          </div>
-
-        </div>
-
-
-        <div className="project-card">
-
-          <div className="project-card-top">
-            <span className="project-icon">○</span>
-            <span className="project-status completed">
-              Completed
-            </span>
-          </div>
-
-          <h3>API Development</h3>
-
-          <p>
-            Authentication and backend API implementation.
-          </p>
-
-          <div className="project-progress">
-            <div className="progress-info">
-              <span>Progress</span>
-              <span>100%</span>
-            </div>
-
-            <div className="progress-bar">
-              <div className="progress-fill progress-100"></div>
-            </div>
-          </div>
-
-          <div className="project-footer">
-            <span>15 tasks</span>
-            <span>2 members</span>
-          </div>
-
-        </div>
+            </Link>
+          );
+        })}
 
       </div>
 
