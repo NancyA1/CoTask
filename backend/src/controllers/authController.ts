@@ -98,5 +98,91 @@ const getUsers = async (req: Request, res: Response) => {
     }
 };
 
+const getMyProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user!.userId;
 
-export { register, login, getUsers };
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true
+            }
+        });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        res.status(200).json({
+            user
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+const updateMyProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.user!.userId;
+        const { name, email } = req.body;
+
+        if (!name || !email) {
+            return res.status(400).json({
+                message: "Name and email are required"
+            });
+        }
+
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                email,
+                NOT: {
+                    id: userId
+                }
+            }
+        });
+
+        if (existingUser) {
+            return res.status(409).json({
+                message: "Email is already registered"
+            });
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: {
+                name,
+                email
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true
+            }
+        });
+
+        res.status(200).json({
+            message: "Profile updated successfully",
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+export { register, login, getUsers , getMyProfile,updateMyProfile};

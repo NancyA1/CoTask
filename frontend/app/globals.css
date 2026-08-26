@@ -4170,3 +4170,278 @@ color: #D98268;
     padding: 18px;
   }
 }
+/* =========================
+   SETTINGS PAGE
+========================= */
+
+.settings-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  max-width: 700px;
+
+  margin-top: 35px;
+  padding: 26px;
+
+  background: #ffffff;
+  border: 1px solid #eaded8;
+  border-radius: 18px;
+
+  box-shadow: 0 8px 25px rgba(70, 50, 40, 0.04);
+}
+
+.settings-avatar {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+
+  background: linear-gradient(
+    135deg,
+    #efa58b,
+    #d98268
+  );
+
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+
+  box-shadow: 0 8px 18px rgba(217, 130, 104, 0.18);
+}
+
+.settings-user-info h2 {
+  margin: 0 0 5px;
+
+  color: #332b2b;
+  font-size: 20px;
+}
+
+.settings-user-info p {
+  margin: 0;
+
+  color: #8d7770;
+  font-size: 14px;
+}
+/* =========================
+   SETTINGS
+========================= */
+
+.settings-card {
+  max-width: 700px;
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 30px;
+  background: #ffffff;
+  border: 1px solid #eaded8;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(70, 50, 40, 0.05);
+}
+
+.settings-avatar {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    #efa58b,
+    #d98268
+  );
+
+  color: white;
+  font-size: 22px;
+  font-weight: 700;
+
+  box-shadow:
+    0 8px 20px rgba(217, 130, 104, 0.2);
+}
+
+.settings-user-info {
+  flex: 1;
+}
+
+.settings-user-info h2 {
+  margin: 0 0 5px;
+  color: #332b2b;
+  font-size: 22px;
+}
+
+.settings-user-info > p {
+  margin: 0;
+  color: #8d7770;
+  font-size: 14px;
+}
+
+.edit-profile-button {
+  margin-top: 20px;
+  padding: 10px 17px;
+
+  border: none;
+  border-radius: 9px;
+
+  background: #efa58b;
+  color: #332b2b;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-profile-button:hover {
+  background: #d98268;
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   EDIT PROFILE FORM
+========================= */
+
+.edit-profile-form {
+  width: 100%;
+  max-width: 500px;
+}
+
+.edit-profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 17px;
+}
+
+.edit-profile-field label {
+  color: #4a3d39;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.edit-profile-field input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 11px 13px;
+
+  border: 1px solid #e4d5ce;
+  border-radius: 9px;
+
+  background: #fffdfb;
+  color: #332b2b;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.edit-profile-field input:focus {
+  border-color: #d98268;
+
+  box-shadow:
+    0 0 0 3px rgba(217, 130, 104, 0.12);
+}
+
+.edit-profile-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.save-profile-button,
+.cancel-profile-button {
+  border: none;
+  border-radius: 9px;
+
+  padding: 10px 16px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.save-profile-button {
+  background: #efa58b;
+  color: #332b2b;
+}
+
+.save-profile-button:hover {
+  background: #d98268;
+  transform: translateY(-1px);
+}
+
+.save-profile-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancel-profile-button {
+  background: #f3e8e3;
+  color: #6f5d57;
+}
+
+.cancel-profile-button:hover {
+  background: #ead8d0;
+}
+
+.profile-message {
+  margin: 14px 0 0;
+  color: #6f5d57;
+  font-size: 13px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+  .settings-card {
+    padding: 22px;
+    gap: 16px;
+  }
+
+  .settings-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 13px;
+    font-size: 18px;
+  }
+
+  .settings-user-info h2 {
+    font-size: 19px;
+  }
+
+  .edit-profile-form {
+    max-width: 100%;
+  }
+
+  .edit-profile-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .save-profile-button,
+  .cancel-profile-button {
+    width: 100%;
+  }
+}
