@@ -21,6 +21,7 @@ export default function Dashboard() {
         );
 
         const data = await response.json();
+        console.log("PROJECT DATA:", data);
 
         if (response.ok) {
           setProjects(data.projects);

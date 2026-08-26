@@ -3982,3 +3982,191 @@ color: #D98268;
   border-color: #d98268;
   box-shadow: 0 0 0 3px rgba(217, 130, 104, 0.12);
 }
+/* =========================
+   TEAM PAGE
+========================= */
+
+.team-count {
+  margin: 35px 0 24px;
+  color: #6f5d57;
+  font-size: 15px;
+  font-weight: 600;
+}
+/* MEMBER GRID */
+
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 20px;
+}
+
+/* MEMBER CARD */
+
+.member-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px;
+  background: #ffffff;
+  border: 1px solid #eaded8;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(70, 50, 40, 0.04);
+  transition: all 0.2s ease;
+}
+
+.member-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(70, 50, 40, 0.08);
+}
+
+/* AVATAR */
+
+.member-avatar {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+  background: linear-gradient(
+    135deg,
+    #efa58b,
+    #d98268
+  );
+
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+
+  box-shadow: 0 6px 15px rgba(217, 130, 104, 0.18);
+}
+
+/* MEMBER INFORMATION */
+
+.member-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.member-info > h3 {
+  margin: 0;
+  color: #332b2b;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.member-info > p {
+  margin: 4px 0 18px;
+  color: #8d7770;
+  font-size: 13px;
+}
+
+/* PROJECTS + TASKS */
+
+.member-projects,
+.member-tasks {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #eee4df;
+}
+
+.member-projects > p,
+.member-tasks > p {
+  margin: 0 0 9px;
+  color: #6f5d57;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+/* REMOVE UGLY BULLET POINTS */
+
+.member-projects ul,
+.member-tasks ul {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.member-projects li,
+.member-tasks li {
+  position: relative;
+
+  padding: 8px 10px 8px 28px;
+
+  background: #fff8f3;
+  border: 1px solid #f0e3dd;
+  border-radius: 8px;
+
+  color: #5f514c;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* SMALL DOT INSTEAD OF BULLET */
+
+.member-projects li::before,
+.member-tasks li::before {
+  content: "";
+
+  position: absolute;
+  left: 11px;
+  top: 50%;
+
+  width: 6px;
+  height: 6px;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+  background: #efa58b;
+}
+
+/* EMPTY STATE */
+
+.member-projects > p,
+.member-tasks > p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.team-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+
+  margin: 35px 0 28px;
+}
+
+.team-stat-number {
+  color: #332b2b;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.team-stat-label {
+  color: #8d7770;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+  .members-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .member-card {
+    padding: 18px;
+  }
+}
