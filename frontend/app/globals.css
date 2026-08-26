@@ -3960,3 +3960,25 @@ color: #D98268;
   font-weight: 600;
   color: #111827;
 }
+.task-status-select {
+  border: 1px solid #eaded8;
+  border-radius: 8px;
+  background: white;
+  color: #6f5d57;
+  padding: 6px 10px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.task-status-select:hover {
+  border-color: #d98268;
+}
+
+.task-status-select:focus {
+  border-color: #d98268;
+  box-shadow: 0 0 0 3px rgba(217, 130, 104, 0.12);
+}
