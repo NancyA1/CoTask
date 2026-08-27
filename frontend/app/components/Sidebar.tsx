@@ -1,7 +1,30 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
+  const router = useRouter();
+  const handleLogout = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/auth/logout",
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+
+    if (response.ok) {
+      router.push("/login");
+    }
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+};
+
   return (
+
     <aside className="sidebar">
 
       <Link href="/dashboard" className="sidebar-logo">
@@ -38,9 +61,9 @@ export default function Sidebar() {
           Settings
         </Link>
 
-        <button>
-          Log out
-        </button>
+       <button onClick={handleLogout}>
+  Log out
+</button>
 
       </div>
 

@@ -185,4 +185,20 @@ const updateMyProfile = async (req: Request, res: Response) => {
         });
     }
 };
-export { register, login, getUsers , getMyProfile,updateMyProfile};
+const logout = async (req: Request, res: Response) => {
+    try {
+        res.clearCookie("token");
+
+        res.status(200).json({
+            message: "Logout successful"
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: "Something went wrong"
+        });
+    }
+};
+export { register, login, getUsers , getMyProfile,updateMyProfile,logout};
