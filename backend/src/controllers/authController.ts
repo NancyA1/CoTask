@@ -62,6 +62,7 @@ const payload = {userId:user.id,username:user.name};
 const token = jwt.sign(payload,secret);
 res.cookie("token", token, {
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
     sameSite: "lax"
 });
 res.status(200).json({
