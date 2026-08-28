@@ -1,12 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
+  
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts" ,
-      "start": "tsx src/server.ts"
-  },
+  "dev": "tsx watch src/server.ts",
+  "build": "tsc && xcopy /E /I /Y src\\generated dist\\generated",
+  "start": "node dist/server.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -22,6 +24,8 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mssql": "^12.3.0",
