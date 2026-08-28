@@ -1,14 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  
   "description": "",
   "main": "index.js",
   "scripts": {
-  "dev": "tsx watch src/server.ts",
-  "build": "tsc && xcopy /E /I /Y src\\generated dist\\generated",
-  "start": "node dist/server.js"
-},
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc && shx cp -r src/generated dist/generated",
+    "start": "node dist/server.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -31,6 +30,7 @@
     "@types/mssql": "^12.3.0",
     "@types/node": "^26.1.2",
     "prisma": "^7.9.1",
+    "shx": "^0.4.0",
     "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   }
