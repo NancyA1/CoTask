@@ -31,6 +31,22 @@
 // }
 
 
+// {
+//   "compilerOptions": {
+//     "rootDir": "./src",
+//     "outDir": "./dist",
+//     "module": "commonjs",
+//     "target": "es2020",
+//     "strict": true,
+//     "esModuleInterop": true,
+//     "skipLibCheck": true,
+//     "allowJs": false
+//   },
+//   "include": ["src/**/*"]
+// }
+
+
+
 {
   "compilerOptions": {
     "rootDir": "./src",
@@ -42,5 +58,10 @@
     "skipLibCheck": true,
     "allowJs": false
   },
-  "include": ["src/**/*"]
+  "files": [
+    "./src/types/express.d.ts"
+  ],
+  "include": [
+    "./src/**/*.ts"
+  ]
 }
