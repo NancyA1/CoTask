@@ -8,7 +8,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 const app = express();
 app.use(cors({
-    origin: "http://localhost:3001",
+    origin: "https://cotaskproject.netlify.app",
     credentials: true
 }));
 app.use(cookieParser());
