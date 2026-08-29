@@ -8,7 +8,7 @@ export default function Sidebar() {
   const handleLogout = async () => {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/auth/logout",
+      "https://serene-heliotrope-3138a4.netlify.app/api/auth/logout",
       {
         method: "POST",
         credentials: "include",

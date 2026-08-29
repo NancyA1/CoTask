@@ -17,7 +17,7 @@ export default function SettingsPage() {
     const fetchProfile = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/auth/me",
+          "https://serene-heliotrope-3138a4.netlify.app/api/auth/me",
           {
             credentials: "include",
           }
@@ -48,7 +48,7 @@ export default function SettingsPage() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/me",
+        "https://serene-heliotrope-3138a4.netlify.app/api/auth/me",
         {
           method: "PUT",
           headers: {

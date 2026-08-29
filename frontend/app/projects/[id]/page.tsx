@@ -97,7 +97,7 @@ const [memberError, setMemberError] = useState("");
     const fetchProject = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/projects/${params.id}`,
+          `https://serene-heliotrope-3138a4.netlify.app/api/projects/${params.id}`,
           {
             credentials: "include",
           }
@@ -115,7 +115,7 @@ const [memberError, setMemberError] = useState("");
         setProject(data.project);
 
         const tasksResponse = await fetch(
-          "http://localhost:3000/api/tasks",
+          "https://serene-heliotrope-3138a4.netlify.app/api/tasks",
           {
             credentials: "include",
           }
@@ -138,7 +138,7 @@ const [memberError, setMemberError] = useState("");
         );
 
         const usersResponse = await fetch(
-  "http://localhost:3000/api/auth/users",
+  "https://serene-heliotrope-3138a4.netlify.app/api/auth/users",
   {
     credentials: "include",
   }
@@ -184,7 +184,7 @@ setUsers(usersData.users);
       setCreatingTask(true);
 
       const response = await fetch(
-        "http://localhost:3000/api/tasks",
+        "https://serene-heliotrope-3138a4.netlify.app/api/tasks",
         {
           method: "POST",
 
@@ -241,7 +241,7 @@ setUsers(usersData.users);
   const handleDeleteTask = async (taskId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/tasks/${taskId}`,
+        `https://serene-heliotrope-3138a4.netlify.app/api/tasks/${taskId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -308,7 +308,7 @@ setUsers(usersData.users);
       setUpdatingTask(true);
 
       const response = await fetch(
-        `http://localhost:3000/api/tasks/${editingTask.id}`,
+        `https://serene-heliotrope-3138a4.netlify.app/api/tasks/${editingTask.id}`,
         {
           method: "PUT",
 
@@ -388,7 +388,7 @@ const handleAssignTask = async (
     setAssigningTask(true);
 
     const response = await fetch(
-      `http://localhost:3000/api/tasks/${selectedTask.id}/assign`,
+      `https://serene-heliotrope-3138a4.netlify.app/api/tasks/${selectedTask.id}/assign`,
       {
         method: "POST",
         headers: {
@@ -473,7 +473,7 @@ const handleAddMember = async (
     setAddingMember(true);
 
     const response = await fetch(
-      `http://localhost:3000/api/projects/${params.id}/members`,
+      `https://serene-heliotrope-3138a4.netlify.app/api/projects/${params.id}/members`,
       {
         method: "POST",
         headers: {

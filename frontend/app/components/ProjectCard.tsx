@@ -32,7 +32,7 @@ const [deleting, setDeleting] = useState(false);
     try {
       setSaving(true);
       const response = await fetch(
-        `http://localhost:3000/api/projects/${id}`,
+        `https://serene-heliotrope-3138a4.netlify.app/api/projects/${id}`,
         {
           method: "PUT",
           headers: {
@@ -67,7 +67,7 @@ const handleDeleteProject = async () => {
   try {
     setDeleting(true);
     const response = await fetch(
-      `http://localhost:3000/api/projects/${id}`,
+      `https://serene-heliotrope-3138a4.netlify.app/api/projects/${id}`,
       {
         method: "DELETE",
         credentials: "include",

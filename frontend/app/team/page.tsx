@@ -12,7 +12,7 @@ export default function TeamPage() {
     const fetchMembers = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/auth/users",
+          "https://serene-heliotrope-3138a4.netlify.app/api/auth/users",
           {
             credentials: "include",
           }
@@ -35,7 +35,7 @@ export default function TeamPage() {
     const fetchProjects = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/projects",
+          "https://serene-heliotrope-3138a4.netlify.app/api/projects",
           {
             credentials: "include",
           }

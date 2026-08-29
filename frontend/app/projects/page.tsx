@@ -13,7 +13,7 @@ useEffect(() => {
   const fetchProjects = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/projects",
+        "https://serene-heliotrope-3138a4.netlify.app/api/projects",
         {
           credentials: "include",
         }

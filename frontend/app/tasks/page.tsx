@@ -11,7 +11,7 @@ export default function TasksPage() {
     const fetchTasks = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/tasks",
+          "https://serene-heliotrope-3138a4.netlify.app/api/tasks",
           {
             credentials: "include",
           }
@@ -40,7 +40,7 @@ const updateTaskStatus = async (taskId: number, status: string) => {
     }
 
     const response = await fetch(
-      `http://localhost:3000/api/tasks/${taskId}`,
+      `https://serene-heliotrope-3138a4.netlify.app/api/tasks/${taskId}`,
       {
         method: "PUT",
         headers: {

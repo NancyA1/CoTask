@@ -16,7 +16,7 @@ export default function Register() {
     console.log("Passwords do not match");
     return;
   }
- const response = await fetch("http://localhost:3000/api/auth/register",{
+ const response = await fetch("https://serene-heliotrope-3138a4.netlify.app/api/auth/register",{
     method:"POST",
     headers:{
     "Content-Type":"application/json"
