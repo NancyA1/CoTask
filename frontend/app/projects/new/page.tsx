@@ -26,10 +26,13 @@ export default function NewProject() {
 
     console.log("BACKEND RESPONSE:", data);
 
-    if (!response.ok) {
-      console.error("ERROR:", data.message);
-      return;
-    }
+   if (!response.ok) {
+  alert(data.message || "Failed to create project");
+  return;
+}
+
+alert("Project created successfully!");
+window.location.href = "/projects";
 
   } catch (error) {
     console.error("REQUEST ERROR:", error);
