@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function DashboardHeader() {
   return (
     <header className="dashboard-header">
@@ -10,9 +11,12 @@ export default function DashboardHeader() {
         </p>
       </div>
 
-      <button className="new-project-btn">
+      <Link
+        href="/projects/new"
+        className="new-project-btn"
+      >
         + New Project
-      </button>
+      </Link>
 
     </header>
   );
