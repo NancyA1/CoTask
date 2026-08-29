@@ -1,12 +1,10 @@
-export {};
+import "express-serve-static-core";
 
-declare global {
-    namespace Express {
-        interface Request {
-            user?: {
-                userId: number;
-                username: string;
-            };
-        }
+declare module "express-serve-static-core" {
+    interface Request {
+        user?: {
+            userId: number;
+            username: string;
+        };
     }
 }
