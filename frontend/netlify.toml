@@ -4,3 +4,9 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[redirects]]
+  force = true
+  from = "/api/*"
+  status = 200
+  to = "https://serene-heliotrope-3138a4.netlify.app/api/:splat"
