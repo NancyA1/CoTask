@@ -10,7 +10,7 @@ export default function NewProject() {
   event.preventDefault();
 
   try {
-    const response = await fetch("/api/projects", {
+    const response = await fetch("https://serene-heliotrope-3138a4.netlify.app/api/projects", {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
